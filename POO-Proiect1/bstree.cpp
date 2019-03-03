@@ -12,11 +12,11 @@ bstree::~bstree()
 	priv_destructor(root);
 }
 
-void bstree::adaugare(int x)
+void bstree::insert(int x)
 {
 	if (root == NULL)
 	{
-		root = new node{ x };
+		root = new node{ x,NULL};
 		if (root == NULL)
 			exit(-1);
 		return;
@@ -26,95 +26,94 @@ void bstree::adaugare(int x)
 
 	while (true)
 	{
-		if (x > n->data&&n->dreapta != NULL)
+		if (x > n->data&&n->right != NULL)
 		{
-			n = n->dreapta;
+			n = n->right;
 		}
 		else if (x > n->data)
 		{
-			node *add = new node{ x };
-			n->dreapta = add;
+			node *add = new node{ x, n};
+			n->right = add;
 			return;
 		}
-		else if (x <= n->data&&n->stanga != NULL)
+		else if (x <= n->data&&n->left != NULL)
 		{
-			n = n->stanga;
+			n = n->left;
 		}
 		else if (x <= n->data)
 		{
-			node *add = new node{ x };
-			n->stanga = add;
+			node *add = new node{ x, n};
+			n->left = add;
 			return;
 		}
 	}
 	return;
 }
 
-
-void bstree::afisareSRD(ostream & os)
+void bstree::inorder(ostream & os)
 {
-	priv_afisareSRD(root, os);
+	priv_printSRD(root, os);
 }
 
-void bstree::afisareSRD()
+void bstree::inorder()
 {
-	priv_afisareSRD(root, cout);
+	priv_printSRD(root, cout);
 }
 
-void bstree::stergere(int x)
+void bstree::remove_node(int x)
 {
-	priv_stergere(root, x);
+	priv_remove_node(root, x);
 }
 
-void bstree::afisare_frunze(void)
+void bstree::leaves(void)
 {
-	priv_afisare_frunze(root);
+	priv_leaves(root);
 }
 
-int bstree::adancime(void)
+int bstree::depth(void)
 {
-	return priv_adancime(root, 1);
+	return priv_depth(root, 1);
 }
 
-void bstree::priv_adaugare(node * n, int x)
+void bstree::priv_insert(node * n, int x)
 {
 }
 
-void bstree::priv_afisareSRD(node * n, ostream & os)
+void bstree::priv_printSRD(node * n, ostream & os)
 {
 	if (n == NULL)
 		return;
-	priv_afisareSRD(n->stanga, os);
+	priv_printSRD(n->left, os);
 	os << n->data << " ";
-	priv_afisareSRD(n->dreapta, os);
+	priv_printSRD(n->right, os);
 }
 
-void bstree::priv_afisare_frunze(node * n)
+void bstree::priv_leaves(node * n)
 {
 	if (n == NULL)
 		return;
 
-	if (n->stanga == NULL && n->dreapta == NULL)
+	if (n->left == NULL && n->right == NULL)
 		cout << n->data << " ";
 	else
 	{
-		priv_afisare_frunze(n->stanga);
-		priv_afisare_frunze(n->dreapta);
+		priv_leaves(n->left);
+		priv_leaves(n->right);
 	}
 }
 
-int bstree::priv_adancime(node * n, int level)
+int bstree::priv_depth(node * n, int level)
 {
 	int s, d;
 	s = d = level;
-	if (n->dreapta != NULL)
-		d = priv_adancime(n->dreapta, level + 1);
-	if (n->stanga != NULL)
-		s = priv_adancime(n->stanga, level + 1);
+	if (n->right != NULL)
+		d = priv_depth(n->right, level + 1);
+	if (n->left != NULL)
+		s = priv_depth(n->left, level + 1);
 	return s < d ? d : s;
 }
 
-void bstree::priv_stergere(node * n, int x)
+void bstree::priv_remove_node(node * n, int x)
 {
 
 	if (n == NULL)
@@ -122,57 +121,57 @@ void bstree::priv_stergere(node * n, int x)
 
 	if (n->data == x)
 	{
-		if (n->stanga == NULL || n->dreapta == NULL)
+		if (n->left == NULL || n->right == NULL)
 		{
-			if (n->stanga == NULL && n->dreapta == NULL)
+			if (n->left == NULL && n->right == NULL)
 			{
 				if (n->father->data < n->data)
-					n->father->dreapta = NULL;
+					n->father->right = NULL;
 				else
-					n->father->stanga = NULL;
+					n->father->left = NULL;
 				delete n;
 				return;
 			}
 
 			if (n->data < n->father->data)
-				n->father->stanga = (n->stanga == NULL) ? n->dreapta : n->stanga;
+				n->father->left = (n->left == NULL) ? n->right : n->left;
 			else
-				n->father->dreapta = (n->stanga == NULL) ? n->dreapta : n->stanga;
+				n->father->right = (n->left == NULL) ? n->right : n->left;
 
 			delete n;
 			return;
 		}
 
 		//The node has both children
-		node *aux = n->dreapta;
-		while (aux->stanga != NULL)
-			aux = aux->stanga;
+		node *aux = n->right;
+		while (aux->left != NULL)
+			aux = aux->left;
 
 	}
 
 	if (n->data < x)
-		priv_stergere(n->dreapta, x);
+		priv_remove_node(n->right, x);
 	else
-		priv_stergere(n->stanga, x);
+		priv_remove_node(n->left, x);
 }
 
 void bstree::priv_destructor(node * n)
 {
 	if (n == NULL)
 		return;
-	priv_destructor(n->stanga);
-	priv_destructor(n->dreapta);
+	priv_destructor(n->left);
+	priv_destructor(n->right);
 	delete n;
 }
 
 void operator+(int x, bstree & bst)
 {
-	bst.adaugare(x);
+	bst.insert(x);
 }
 
 ostream & operator<< (ostream &os, bstree &a)
 {
-	a.afisareSRD(os);
+	a.inorder(os);
 	return os;
 }
 
@@ -180,7 +179,7 @@ std::istream & operator>>(std::istream & is, bstree &bst)
 {
 	int x;
 	if (is >> x)
-		bst.adaugare(x);
+		bst.insert(x);
 	
 	return is;
 }

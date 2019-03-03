@@ -4,12 +4,13 @@
 
 node::node()
 {
-	stanga = dreapta = NULL;
+	left = right = NULL;
 }
 
 
-node::node(int x)
+node::node(int x,node *father)
 {
-	stanga = dreapta = NULL;
+	left = right = NULL;
+	this->father = father;
 	data = x;
 }

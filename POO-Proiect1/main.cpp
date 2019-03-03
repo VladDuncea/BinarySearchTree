@@ -5,20 +5,22 @@ using namespace std;
 
 int main()
 {
-	bstree a;
+	bstree bst;
 	int x = 8;
-	//cout << a;
-	a.adaugare(5);
-	a.adaugare(3);
-	a.adaugare(7);
-	a.adaugare(10);
-	x + a;
-	cin >> a;
-	a.afisareSRD();
+	//Adding
+	bst.insert(5);
+	bst.insert(3);
+	bst.insert(7);
+	bst.insert(10);
+	x + bst;
+	cin >> bst>>bst>>bst;
+
+	bst.remove_node(23);
+	bst.inorder();
 	cout << endl;
-	a.afisare_frunze();
+	bst.leaves();
 	cout << endl;
-	cout << a.adancime();
+	cout << bst.depth();
 
 	return 0;
 }

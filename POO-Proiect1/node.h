@@ -4,11 +4,11 @@
 class node
 {
 	int data;
-	node * stanga, *dreapta, *father;
+	node * left, *right, *father;
 	friend class bstree;
 
 public:
 	node();
 
-	node(int x);
+	node(int x,node *father);
 };

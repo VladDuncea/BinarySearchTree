@@ -6,11 +6,11 @@ class bstree
 {
 	node *root;
 
-	void priv_adaugare(node *n, int x);
-	void priv_afisareSRD(node *n, std::ostream &os);
-	void priv_afisare_frunze(node *n);
-	int priv_adancime(node *n, int level);
-	void priv_stergere(node *n, int x);
+	void priv_insert(node *n, int x);
+	void priv_printSRD(node *n, std::ostream &os);
+	void priv_leaves(node *n);
+	int priv_depth(node *n, int level);
+	void priv_remove_node(node *n, int x);
 	void priv_destructor(node *n);
 
 public:
@@ -18,17 +18,17 @@ public:
 	bstree();
 	~bstree();
 
-	void adaugare(int);
+	void insert(int);
 
-	void afisareSRD(std::ostream &);
+	void inorder(std::ostream &);
 
-	void afisareSRD();
+	void inorder();
 
-	void stergere(int);
+	void remove_node(int);
 
-	void afisare_frunze(void);
+	void leaves(void);
 
-	int adancime(void);
+	int depth(void);
 
 	friend void operator+ (int x,bstree &bst);
 	friend std::ostream & operator<< (std::ostream &, bstree &);
