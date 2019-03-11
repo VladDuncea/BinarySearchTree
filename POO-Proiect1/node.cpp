@@ -5,6 +5,7 @@
 node::node()
 {
 	left = right = NULL;
+	father = NULL;
 }
 
 

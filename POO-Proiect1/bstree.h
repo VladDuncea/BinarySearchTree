@@ -7,7 +7,7 @@ class bstree
 	node *root;
 
 	void priv_insert(node *n, int x);
-	void priv_printSRD(node *n, std::ostream &os);
+	void priv_printSRD(const node *n, std::ostream &os) const;
 	void priv_leaves(node *n);
 	int priv_depth(node *n, int level);
 	void priv_remove_node(node *n, int x);
@@ -20,9 +20,9 @@ public:
 
 	void insert(int);
 
-	void inorder(std::ostream &);
+	void inorder(std::ostream &) const;
 
-	void inorder();
+	void inorder() const;
 
 	void remove_node(int);
 
@@ -31,7 +31,7 @@ public:
 	int depth(void);
 
 	friend void operator+ (int x,bstree &bst);
-	friend std::ostream & operator<< (std::ostream &, bstree &);
+	friend std::ostream & operator<< (std::ostream &,const bstree &);
 	friend std::istream & operator>> (std::istream &, bstree &);
 };
 

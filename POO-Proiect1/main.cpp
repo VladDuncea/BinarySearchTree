@@ -15,7 +15,7 @@ int main()
 	x + bst;
 	cin >> bst>>bst>>bst;
 
-	bst.remove_node(23);
+	bst.remove_node(5);
 	bst.inorder();
 	cout << endl;
 	bst.leaves();

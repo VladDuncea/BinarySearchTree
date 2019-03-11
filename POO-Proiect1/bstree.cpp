@@ -16,7 +16,7 @@ void bstree::insert(int x)
 {
 	if (root == NULL)
 	{
-		root = new node{ x,NULL};
+		root = new (nothrow) node{ x,NULL};
 		if (root == NULL)
 			exit(-1);
 		return;
@@ -50,12 +50,12 @@ void bstree::insert(int x)
 	return;
 }
 
-void bstree::inorder(ostream & os)
+void bstree::inorder(ostream & os) const
 {
 	priv_printSRD(root, os);
 }
 
-void bstree::inorder()
+void bstree::inorder() const
 {
 	priv_printSRD(root, cout);
 }
@@ -79,7 +79,7 @@ void bstree::priv_insert(node * n, int x)
 {
 }
 
-void bstree::priv_printSRD(node * n, ostream & os)
+void bstree::priv_printSRD(const node * n, ostream & os) const
 {
 	if (n == NULL)
 		return;
@@ -115,40 +115,60 @@ int bstree::priv_depth(node * n, int level)
 
 void bstree::priv_remove_node(node * n, int x)
 {
-
+	//The node with value x is not in the BST
 	if (n == NULL)
 		return;
 
+	//Found the node
 	if (n->data == x)
 	{
+		//The node has at most one child
 		if (n->left == NULL || n->right == NULL)
 		{
+			//The node has no children
 			if (n->left == NULL && n->right == NULL)
 			{
+				//The node is the last one in the BST
+				if (n == root)
+				{
+					root = NULL;
+					delete n;
+					return;
+				}
+				//Break the node from its father
 				if (n->father->data < n->data)
 					n->father->right = NULL;
 				else
 					n->father->left = NULL;
+				//Free the memory
 				delete n;
 				return;
 			}
 
+			//The node has one child
+			//Link the father of the node to the child
 			if (n->data < n->father->data)
 				n->father->left = (n->left == NULL) ? n->right : n->left;
 			else
 				n->father->right = (n->left == NULL) ? n->right : n->left;
-
+			//Free memory
 			delete n;
 			return;
 		}
 
 		//The node has both children
+		//Find the minimal node greather than this
 		node *aux = n->right;
 		while (aux->left != NULL)
 			aux = aux->left;
-
+		//Set the found node in place of the removed one
+		n->data = aux->data;
+		//Remove the found node
+		priv_remove_node(aux, aux->data);
+		return;
 	}
 
+	//Search for the node
 	if (n->data < x)
 		priv_remove_node(n->right, x);
 	else
@@ -169,7 +189,7 @@ void operator+(int x, bstree & bst)
 	bst.insert(x);
 }
 
-ostream & operator<< (ostream &os, bstree &a)
+ostream & operator<< (ostream &os,const bstree &a)
 {
 	a.inorder(os);
 	return os;
